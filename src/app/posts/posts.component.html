@@ -1,5 +1,7 @@
-<ul>
-  <li *ngFor="let post of posts">
+<!-- input adlı template değişkeni oluşturduk. Bu değişkene inputa gelen bilgi aktarılır. -->
+<input type="text" (keyup.enter)="createPost(input)" #input class="form-control mb-2">
+<ul class="list-group">
+  <li *ngFor="let post of posts" class="list-group-item">
     {{post.title}}
   </li>
 </ul>
