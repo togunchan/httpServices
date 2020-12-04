@@ -9,6 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class PostsComponent {
   posts: [any];
   private url = "https://jsonplaceholder.typicode.com/posts"
+
   constructor(private http: HttpClient) {
     http.get(this.url)
       .subscribe(response => {
@@ -38,7 +39,14 @@ export class PostsComponent {
     // })).subscribe(response => {
     //   console.log(response);
     // });
+  }
 
+  deletePost(post){
+    this.http.delete(this.url+"/"+post.id).subscribe(response => {
+      console.log(response);
+      let index=this.posts.indexOf(post);
+      this.posts.splice(index,1);
+    })
 
   }
 
