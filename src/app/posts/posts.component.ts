@@ -7,16 +7,20 @@ import { PostService } from '../services/post.service';
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.css']
 })
-export class PostsComponent implements OnInit{
+export class PostsComponent implements OnInit {
   posts: [any];
-  
-//PostService "Injectable" olduğundan aşağıdaki gibi buraya yerleştirildi ve artık metotlar çağırılabilir.
-  constructor(private postService: PostService) {}
-  
+  error;
+
+  //PostService "Injectable" olduğundan aşağıdaki gibi buraya yerleştirildi ve artık metotlar çağırılabilir.
+  constructor(private postService: PostService) { }
+
   ngOnInit(): void {
     this.postService.getPosts()
       .subscribe(response => {
         this.posts = <any>response;
+        console.log(response);
+      }, error => {
+        this.error = error;
       });
   }
 
@@ -27,7 +31,6 @@ export class PostsComponent implements OnInit{
       .subscribe(response => {
         post['id'] = response['id'];
         this.posts.splice(0, 0, post);
-
       })
   }
 
@@ -35,7 +38,7 @@ export class PostsComponent implements OnInit{
     post.title = "updated";
 
     this.postService.updatePost(post)
-    .subscribe(response => console.log(response));
+      .subscribe(response => console.log(response));
     // this.http.patch(this.url + "/" + post.id, JSON.stringify({
     //   title: "updated"
     // })).subscribe(response => {
@@ -43,13 +46,15 @@ export class PostsComponent implements OnInit{
     // });
   }
 
-  deletePost(post){
+  deletePost(post) {
     this.postService.deletePost(post)
-    .subscribe(response => {
-      console.log(response);
-      let index=this.posts.indexOf(post);
-      this.posts.splice(index,1);
-    })
+      .subscribe(response => {
+        console.log(response);
+        let index = this.posts.indexOf(post);
+        this.posts.splice(index, 1);
+      }, error => {
+        this.error = error;
+      })
 
   }
 
